@@ -1,0 +1,15 @@
+<view class="container">
+	<swiper class="video-swiper" circular="{{circular}}" easing-function="{{easingFunction}}" vertical current="0"
+		duration="{{duration}}" bindanimationfinish="animationfinish" bindtouchstart="touchStart" bindtouchend="touchEnd">
+		<!-- curQueue 循环会导致video重新插入，objectFit 不可变更 -->
+		<swiper-item class="swiper-item" wx:for="{{curQueue}}" wx:key="id">
+			<mpVideo bindtap='gesture' seek="{{item.isSeek}}" isPlay="{{item.isPlay}}" isCurrent="{{item.isCurrent}}"
+				class="video_item" data-index="{{index}}"  data-isplay="{{item.isPlay}}"
+				src="{{item.url}}">
+			</mpVideo>
+		</swiper-item>
+	</swiper>
+	<image src='../../images/componenticon-heart.png' class="like-img {{item.animate}}"
+		style='top:{{item.pageY}}px;left:{{item.pageX}}px;' wx:for="{{like_imgs}}" wx:key="index">
+	</image>
+</view>

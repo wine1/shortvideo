@@ -3,10 +3,10 @@
 	binderror="onError" bindtimeupdate="onTimeUpdate" bindwaiting="onWaiting" bindprogress="onProgress"
 	bindloadedmetadata="onLoadedMetaData">
 </video> -->
-<video class="video" id="video" src="{{src}}" enable-progress-gesture loop="{{true}}" show-center-play-btn="{{false}}"
-	controls="{{false}}" object-fit="contain" bindtimeupdate="onTimeUpdate">
+<video class="video" id="video" src="{{src}}" enable-progress-gesture loop="{{true}}" show-center-play-btn="{{false}}" controls="{{false}}" object-fit="contain" bindtimeupdate="onTimeUpdate">
 </video>
 <image class="icon-play" wx:if="{{!isPlay && isCurrent}}" src="../../images/componenticon-play.png"></image>
+<image class="icon-loading" wx:if="{{!isLoaing && isCurrent}}" src="../../images/componenticon-loading.png"></image>
 <view class="progress-bar">
 	<view class="bar" style="width:{{barWidth}}%"></view>
 </view>

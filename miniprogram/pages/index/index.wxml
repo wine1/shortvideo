@@ -3,6 +3,6 @@
     pauseCurrentVideo="{{pauseCurrentVideo1}}" bindplay="onPlay" bindpause="onPause" bindtimeupdate="onTimeUpdate"
     bindended="onEnded" binderror="onError" bindwaiting="onWaiting" bindprogress="onProgress"
     bindloadedmetadata="onLoadedMetaData" objectFit="contain" bind:funcPagination="funcPagination"
-    bind:funcPulldownRefresh="funcPulldownRefresh" bind:showRefresh="showRefresh" bind:change="change">
+    bind:funcPulldownRefresh="funcPulldownRefresh" bind:showRefresh="showRefresh">
   </video-swiper>
 </view>

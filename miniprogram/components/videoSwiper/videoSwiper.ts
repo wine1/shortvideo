@@ -240,7 +240,7 @@ Component({
     },
     playCurrent: function playCurrent(current) {
       let { curQueue } = this.data
-      console.log('输出正在播放的列表',curQueue)
+      // console.log('输出正在播放的列表',curQueue)
       curQueue.forEach((item: any, index: any) => {
         item.isPlay = index === current ? true : false;
         item.isCurrent = current === index ? true : false

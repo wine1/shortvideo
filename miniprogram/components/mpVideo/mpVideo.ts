@@ -20,6 +20,10 @@ Component({
       type: Boolean,
       value: true,
     },
+    isLoading:{
+      type:Boolean,
+      value:false,
+    },
     isPlay: {
       type: Boolean,
       value: false,
@@ -60,7 +64,8 @@ Component({
       let denominator = e.detail.duration
       let barWidth = molecule / denominator * 100
       this.setData({
-        barWidth
+        barWidth,
+        isLoading:false
       })
     },
     // onSeekcomplete(e: any) {
@@ -79,9 +84,12 @@ Component({
     //   console.log('error', e)
     // },
 
-    // onWaiting: function onWaiting(e: any) {
-    //   console.log('wait', e)
-    // },
+    onWaiting: function onWaiting(e: any) {
+      console.log('wait', e)
+      this.setData({
+        isLoading:true
+      })
+    },
     // onProgress: function onProgress(e: any) {
     //   console.log('progress', e)
     // },

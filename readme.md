@@ -7,3 +7,7 @@
 
 tips：
 1.[video组件显示Failed to load media是怎么回事？](https://developers.weixin.qq.com/community/develop/doc/0004ecb5cf0dd0ecc0994172557000)
+
+![1](./screenshot/1.png)
+![2](./screenshot/2.png)
+![3](./screenshot/3.jpeg)

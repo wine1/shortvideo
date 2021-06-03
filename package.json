@@ -2,14 +2,22 @@
   "name": "miniprogram-ts-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
+  "scripts": { 
+    "commit": "git-cz",
     "tsc": "node ./node_modules/typescript/lib/tsc.js"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "keywords": [],
   "author": "",
   "license": "",
   "dependencies": {},
   "devDependencies": {
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "miniprogram-api-typings": "^2.8.3-1",
     "typescript": "^3.9.7"
   }

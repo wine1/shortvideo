@@ -1,0 +1,15 @@
+<view>
+  <mp-video-swiper 
+  class="video-swiper" 
+  video-list="{{videoList}}"  
+  objectFit="contain"
+  bindplay="onPlay"
+  bindpause="onPause"
+  bindtimeupdate="onTimeUpdate"
+  bindended="onEnded"
+  binderror="onError"
+  bindwaiting="onWaiting"
+  bindprogress="onProgress"
+  bindloadedmetadata="onLoadedMetaData">
+  </mp-video-swiper>
+</view>

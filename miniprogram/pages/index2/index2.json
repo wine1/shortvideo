@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+      "mp-video-swiper": "../../miniprogram_npm/@miniprogram-component-plus/video-swiper/index"
+  }
+}

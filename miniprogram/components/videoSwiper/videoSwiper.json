@@ -2,6 +2,5 @@
     "component": true,
     "usingComponents": {
         "mpVideo": "/components/mpVideo/mpVideo"
-
     }
 }

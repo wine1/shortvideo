@@ -1,5 +1,5 @@
 <view class="container">
-	<swiper class="video-swiper" circular="{{circular}}" easing-function="{{easingFunction}}" vertical current="0"
+	<swiper class="video-swiper" circular="{{circular}}" easing-function="{{easingFunction}}" vertical current="{{currentIndex}}"
 		duration="{{duration}}" bindanimationfinish="animationfinish" bindtouchstart="touchStart" bindtouchend="touchEnd">
 		<swiper-item class="swiper-item" wx:for="{{curQueue}}" wx:key="id">
 			<mpVideo bindtap='gesture' seek="{{item.isSeek}}" isPlay="{{item.isPlay}}" isCurrent="{{item.isCurrent}}"

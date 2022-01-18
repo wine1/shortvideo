@@ -18,16 +18,16 @@ Component({
     pauseCurrentVideo: {
       type: Boolean,
       value: false,
-      observer: function observer() {
+      observer: function observer(newval) {
         let current = this.data._last
         let { curQueue } = this.data
         let that: any = this
-        if (arguments[0]) {
+        if (newval) {
           curQueue.forEach(function (item: any) {
             item.isPlay = false
           });
         } else {
-          this.data._videoContexts.forEach(function ( index: any) {
+          this.data._videoContexts.forEach(function (index: any) {
             if (current === index) {
               that.data._videoContext.play()
             } else {
@@ -50,9 +50,8 @@ Component({
     videoList: {
       type: Array,
       value: [],
-      observer: function observer() {
-        var newVal = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        newVal && this._videoListChanged(newVal);
+      observer: function observer(newVal) {
+        newVal?.length && this._videoListChanged(newVal);
       }
     },
   },
@@ -61,24 +60,22 @@ Component({
     prevQueue: <any>[],/**已经被放入过swiper的数组 */
     curQueue: <any>[],/**放入swiper中的数组 */
     circular: false,
+    currentIndex:0,current:0,
     _last: 0, /**记录current的滑动前的值 */
     _change: -2,
     _invalidUp: 0,
     _invalidDown: 0,
     _videoContexts: <any>[],
     diff: 0, /** diff为0时没有滑动 */
-    showCommentList: false,
-    // commentCount: 0,
-    hotReplyLists: <any>[],
-    newReplyLists: <any>[],
     touchDirction: 0,/**1 上滑 2 下滑 */
     lastTime: 0, /** 最后一次单击事件发生的时间 */
     lastTimeoutFunc: <any>[],/** 单击事件触发的函数*/
-    // isPause: false,/** 视频暂停中 */
-    hasLogin: false,/** 是否登录 */
-    showLoginPop: false,/** 显示登录弹窗 */
     time_id: 600,
     like_imgs: [],
+    /** vediolist长度 */
+    total:0,
+    /** 记录当前视频在整个videolist中对应的下标 */
+    recordPos:0,
   },
   lifetimes: {
     attached() {
@@ -99,8 +96,14 @@ Component({
       let absX = Math.abs(tmX);
       let absY = Math.abs(tmY);
       if (absY > absX * 2 && tmY < 10) {
-        console.log("上滑动=====", this.data.diff, this.data.nextQueue)
-        
+        /** 滑到最后一个视频后阻止视频继续滑动 */
+        let {recordPos,total,current}=this.data
+        if(recordPos>=total-1){
+          this.setData({
+            currentIndex:current
+          })
+        }
+        console.log("上滑动=====")
         curQueue.forEach((item: any, index: any) => {
           if (this.data._last === index) {
             item.isSeek = true
@@ -113,7 +116,7 @@ Component({
           curQueue
         })
       } else if (absY > absX * 2 && tmY > 100) {
-        console.log("下滑动=====", this.data.diff, this.data.prevQueue)
+        console.log("下滑动=====")
         curQueue.forEach((item: any, index: any) => {
           if (this.data._last === index) {
             item.isSeek = true
@@ -138,36 +141,34 @@ Component({
 
     _videoListChanged: function _videoListChanged(newVal) {
       var _this = this;
-      var data = this.data;
-      // newVal.forEach(async function (item: any, index: any) {
-      //  });
-      data.nextQueue = newVal
-
-      if (data.curQueue.length === 0) {
-        data.curQueue.forEach((item:any) => {
-          item.isPlay=false
-          item.isCurrent=false
+      let {prevQueue,curQueue,nextQueue} = this.data;
+ 
+      nextQueue =nextQueue.concat(newVal)
+      if (curQueue.length === 0) {
+        curQueue.forEach((item: any) => {
+          item.isPlay = false
+          item.isCurrent = false
         });
+        curQueue=nextQueue.splice(0, 3)
+        this.data.nextQueue=nextQueue
         this.setData({
-          curQueue: data.nextQueue.splice(0, 3)
+          curQueue
         }, function () {
           _this.playCurrent(0)
-          _this.triggerEvent('change', { activeVideo: data.curQueue[0] });
+          _this.triggerEvent('change', { activeVideo: curQueue[0] });
         });
       }
+      this.data.total=prevQueue.length+curQueue.length+nextQueue.length
+
     },
 
     animationfinish: function animationfinish(e) {
       let that: any = this
       let { _last, _change, curQueue, prevQueue, nextQueue, touchDirction } = this.data
       var current = e.detail.current;
+      this.data.current=current
       var diff = current - _last;
-      if (diff === 0) {
-        this.setData({
-          diff: 0
-        })
-        return
-      }
+      if (diff === 0) return;
       this.data._last = current;
       this.playCurrent(current);
       this.triggerEvent('change', { activeVideo: curQueue[current] });
@@ -177,12 +178,11 @@ Component({
         this.triggerEvent('funcPagination')
       }
       if (direction === 'up') {
+        this.data.recordPos+=1
         if (this.data._invalidDown === 0) {
           var change = (_change + 1) % 3;
           if (change < 0) {
-            this.setData({
-              _change: change
-            })
+            this.data._change=change
             return
           }
           var add = nextQueue.shift();
@@ -197,10 +197,9 @@ Component({
         } else {
           this.data._invalidDown -= 1;
         }
-
-
       }
       if (direction === 'down') {
+        this.data.recordPos-=1
         if (this.data._invalidUp === 0) {
 
           var _change2 = _change;
@@ -210,7 +209,7 @@ Component({
             curQueue[_change2] = _add;
             nextQueue.unshift(_remove);
 
-            this.data._change = (_change - 1 + 3) % 3;
+            this.data._change = (_change +2) % 3;
           } else {
             this.data._invalidDown += 1;
           }
@@ -220,13 +219,14 @@ Component({
 
       }
       var circular = true;
-      if (nextQueue.length === 0 && current !== 0) {
-        circular = false;
-      }
+      /** 鉴于3n+2个视频长度时无法播放最后一个视频 取消末尾的circular限制 改成用视频长度来判断 */
+      // if (nextQueue.length === 0 && current !== 0) {
+      //   circular = false;
+      // }
       if (prevQueue.length === 0 && current !== 2) {
         circular = false;
       }
-      console.log(prevQueue, curQueue, nextQueue)
+      // console.log(prevQueue, curQueue, nextQueue)
 
       this.setData({
         curQueue,
@@ -249,7 +249,7 @@ Component({
         curQueue
       })
     },
- 
+
 
     gesture(e: any) {
       let currentTime = new Date().getTime()
@@ -277,7 +277,7 @@ Component({
       })
     },
 
-   
+
     onPlay(e) {
       this.trigger(e, 'play')
     },
@@ -312,7 +312,7 @@ Component({
     trigger(e, type, ext = {}) {
       const detail = e.detail
       const activeId = e.target.dataset.id
-      this.triggerEvent(type, Object.assign({...detail,activeId}, ext))
+      this.triggerEvent(type, Object.assign({ ...detail, activeId }, ext))
     },
 
     /** 双击点赞 爱心 */

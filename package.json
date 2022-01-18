@@ -2,7 +2,7 @@
   "name": "miniprogram-ts-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": { 
+  "scripts": {
     "commit": "git-cz",
     "tsc": "node ./node_modules/typescript/lib/tsc.js"
   },
@@ -14,7 +14,9 @@
   "keywords": [],
   "author": "",
   "license": "",
-  "dependencies": {},
+  "dependencies": {
+    "@miniprogram-component-plus/video-swiper": "^1.0.1"
+  },
   "devDependencies": {
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
